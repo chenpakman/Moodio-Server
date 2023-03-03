@@ -25,6 +25,8 @@ public class FileService {
         while ((line = bfr.readLine()) != null) {
             builder.append(line);
         }
+        File f= new File(filePath);           //file to be delete
+        f.delete();
         return builder.toString();
     }
     private String saveImage(String path, MultipartFile file){
