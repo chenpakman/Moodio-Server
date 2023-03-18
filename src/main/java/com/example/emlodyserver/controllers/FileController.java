@@ -1,5 +1,6 @@
 package com.example.emlodyserver.controllers;
 
+import com.example.emlodyserver.Response.Errors;
 import com.example.emlodyserver.Response.FileResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,13 +22,14 @@ public class FileController {
     private String path;
     @PostMapping(value="/app")
     public ResponseEntity<String> fileUpload(@RequestParam("image") MultipartFile image) throws IOException, InterruptedException {
+        System.out.println("Here");
        String emotion= this.fileService.getEmotionByImage(path,image);
         System.out.println(emotion);
         if(!emotion.isEmpty()) {
             return new ResponseEntity<>(emotion, HttpStatus.OK);
         }
         else {
-            return new ResponseEntity<>(emotion, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(Errors.getInvalidImage(), HttpStatus.NOT_FOUND);
         }
     }
     @GetMapping(value="/app")

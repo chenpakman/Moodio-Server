@@ -25,7 +25,7 @@ public class FileService {
         while ((line = bfr.readLine()) != null) {
             builder.append(line);
         }
-        File f= new File(filePath);           //file to be delete
+        File f= new File(filePath);
         f.delete();
         return builder.toString();
     }
