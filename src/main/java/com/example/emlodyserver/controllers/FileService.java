@@ -1,5 +1,9 @@
 package com.example.emlodyserver.controllers;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -7,10 +11,14 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Scanner;
 
 @Service
 public class FileService {
@@ -44,6 +52,7 @@ public class FileService {
         }
         return filePath;
     }
+
 
     private String getImageName(){
         SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMdd_HHmmss");
