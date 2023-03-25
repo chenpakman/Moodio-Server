@@ -19,7 +19,7 @@ public class SpotifyApiManager {
         if(token!=null) {
             OkHttpClient client = new OkHttpClient();
             HttpUrl.Builder urlBuilder = HttpUrl.parse("https://api.spotify.com/v1/search").newBuilder();
-            urlBuilder.addQueryParameter("q", emotion+"+mood");
+            urlBuilder.addQueryParameter("q", emotion+"mix");
             urlBuilder.addQueryParameter("type", "playlist");
             String url = urlBuilder.build().toString();
             System.out.println(url);

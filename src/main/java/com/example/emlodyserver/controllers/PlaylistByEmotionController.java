@@ -36,8 +36,14 @@ public class PlaylistByEmotionController {
             if (!emotion.isEmpty()) {
 
                 response.setEmotion(emotion);
-                String spotifyUrl = spotifyApiManager.getPlaylistUrl(emotion);
-                response.setPlaylistUrl(spotifyUrl);
+                switch(emotion){
+                    case "angry":
+                        String angryUrl = spotifyApiManager.getPlaylistUrl("Angry");
+                        response.addPlaylistUrl("Angry", angryUrl);
+                        String relaxedUrl = spotifyApiManager.getPlaylistUrl("Relaxing");
+                        response.addPlaylistUrl("Relaxing",relaxedUrl);
+                        break;
+                }
                 return new ResponseEntity<>(response, HttpStatus.OK);
 
             } else {
