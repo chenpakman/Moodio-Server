@@ -19,7 +19,7 @@ public class SpotifyApiManager {
         if(token!=null) {
             OkHttpClient client = new OkHttpClient();
             HttpUrl.Builder urlBuilder = HttpUrl.parse("https://api.spotify.com/v1/search").newBuilder();
-            urlBuilder.addQueryParameter("q", emotion+"mix");
+            urlBuilder.addQueryParameter("q", emotion + " mix");
             urlBuilder.addQueryParameter("type", "playlist");
             String url = urlBuilder.build().toString();
             System.out.println(url);
@@ -44,7 +44,7 @@ public class SpotifyApiManager {
     private String getSpotifyAccessToken() {
         OkHttpClient client = new OkHttpClient();
 
-        String clientCredentials = CLIENT_ID+":"+CLIENT_SECRET;
+        String clientCredentials = CLIENT_ID + ":" + CLIENT_SECRET;
         String encodedCredentials = Base64.getEncoder().encodeToString(clientCredentials.getBytes());
 
         RequestBody requestBody = new FormBody.Builder()

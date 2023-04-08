@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import com.google.gson.Gson;
+
 
 import java.io.IOException;
 
@@ -26,8 +28,9 @@ public class PlaylistByEmotionController {
     String emotion;
 
     @PostMapping(value = "/app")
-    public ResponseEntity<ResponseServer> fileUpload(@RequestParam("image") MultipartFile image) {
+    public ResponseEntity<String> fileUpload(@RequestParam("image") MultipartFile image) {
         System.out.println("Here");
+        Gson gson = new Gson();
 
         try {
             emotion = this.fileService.getEmotionByImage(path, image);
@@ -35,24 +38,27 @@ public class PlaylistByEmotionController {
             System.out.println(emotion);
             if (!emotion.isEmpty()) {
 
-                response.setEmotion(emotion);
+
                 switch(emotion){
                     case "angry":
+                        response.setEmotion("Angry");
                         String angryUrl = spotifyApiManager.getPlaylistUrl("Angry");
                         response.addPlaylistUrl("Angry", angryUrl);
                         String relaxedUrl = spotifyApiManager.getPlaylistUrl("Relaxing");
                         response.addPlaylistUrl("Relaxing",relaxedUrl);
+                        response.setPlaylistUrl(spotifyApiManager.getPlaylistUrl("Relaxing"));
                         break;
                 }
-                return new ResponseEntity<>(response, HttpStatus.OK);
+
+                return new ResponseEntity<>(gson.toJson(response), HttpStatus.OK);
 
             } else {
                 response.setError(Errors.getInvalidImage());
-                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(gson.toJson(response), HttpStatus.NOT_FOUND);
             }
         } catch (IOException e) {
             response.setError(e.getMessage());
-            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(gson.toJson(response), HttpStatus.NOT_FOUND);
 
         } catch (InterruptedException e) {
             throw new RuntimeException(e);

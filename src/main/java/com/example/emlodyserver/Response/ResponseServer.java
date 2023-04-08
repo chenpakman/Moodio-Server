@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ResponseServer {
-    Map<String, String> playlistUrls;
+    Map<String, String> playlistsUrls;
+    String playlistUrl;
     String error;
     String emotion;
 
@@ -16,12 +17,8 @@ public class ResponseServer {
         this.error = error;
     }
 
-    public void addPlaylistUrl(String emotion, String playlistUrl) {
-        if(null == this.playlistUrls){
-            this.playlistUrls = new HashMap<>();
-        }
-
-        this.playlistUrls.put(emotion, playlistUrl);
+    public void setPlaylistUrl(String playlistUrl) {
+        this.playlistUrl = playlistUrl;
     }
 
     public String getEmotion() {
@@ -32,7 +29,19 @@ public class ResponseServer {
         return error;
     }
 
-    public Map<String, String> getPlaylistUrls() {
-        return playlistUrls;
+    public String getPlaylistUrl() {
+        return playlistUrl;
+    }
+
+    public Map<String, String> getPlaylistsUrls() {
+        return playlistsUrls;
+    }
+
+    public void addPlaylistUrl(String emotion, String playlistUrl) {
+        if(null == this.playlistsUrls){
+            this.playlistsUrls = new HashMap<>();
+        }
+
+        this.playlistsUrls.put(emotion, playlistUrl);
     }
 }
