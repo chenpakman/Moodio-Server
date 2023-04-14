@@ -29,29 +29,54 @@ public class PlaylistByEmotionController {
 
     @PostMapping(value = "/app")
     public ResponseEntity<String> fileUpload(@RequestParam("image") MultipartFile image) {
-        System.out.println("Here");
+        System.out.println("Here");//TODO:delete
         Gson gson = new Gson();
+        Boolean isRelaxing = false;
+        Boolean isHappy = false;
 
         try {
-            emotion = this.fileService.getEmotionByImage(path, image);
+            String resEmotion = this.fileService.getEmotionByImage(path, image);
 
-            System.out.println(emotion);
-            if (!emotion.isEmpty()) {
+            if (null != resEmotion && !resEmotion.isEmpty()) {
+                System.out.println(resEmotion); //TODO:delete
+                this.emotion =
+                        resEmotion.replace(resEmotion.charAt(0), resEmotion.substring(0,1).toUpperCase().charAt(0));
+                this.response.setEmotion(this.emotion);
 
+                switch(this.emotion){
 
-                switch(emotion){
-                    case "angry":
-                        response.setEmotion("Angry");
-                        String angryUrl = spotifyApiManager.getPlaylistUrl("Angry");
-                        response.addPlaylistUrl("Angry", angryUrl);
-                        String relaxedUrl = spotifyApiManager.getPlaylistUrl("Relaxing");
-                        response.addPlaylistUrl("Relaxing",relaxedUrl);
-                        response.setPlaylistUrl(spotifyApiManager.getPlaylistUrl("Relaxing"));
+                    case "Fear":
+                        isRelaxing = true;
                         break;
+                    case "Sad":
+                        String sadUrl = this.spotifyApiManager.getPlaylistUrl("Sad Soft");
+                        this.response.addPlaylistUrl("Sad", sadUrl);
+                        isHappy = true;
+                        break;
+                    case "Angry":
+                        String angryUrl = this.spotifyApiManager.getPlaylistUrl("Angry");
+                        this.response.addPlaylistUrl("Angry", angryUrl);
+                        isRelaxing = true;
+                        break;
+                    case "Happy":
+                        isHappy = true;
+                        break;
+                    default:
+                        break;// TODO: ask what the user wants to listen to? show featured playlist?
+                }
+
+                if(isRelaxing){
+                    this.response.setPlaylistUrl(this.spotifyApiManager.getPlaylistUrl("Relaxing"));
+                    String relaxingUrl = this.spotifyApiManager.getPlaylistUrl("Relaxing");
+                    this.response.addPlaylistUrl("Relaxing", relaxingUrl);
+                }
+                if(isHappy){
+                    this.response.setPlaylistUrl(this.spotifyApiManager.getPlaylistUrl("Good Mood Happy"));
+                    String happyUrl = this.spotifyApiManager.getPlaylistUrl("Happy");
+                    this.response.addPlaylistUrl("Happy", happyUrl);
                 }
 
                 return new ResponseEntity<>(gson.toJson(response), HttpStatus.OK);
-
             } else {
                 response.setError(Errors.getInvalidImage());
                 return new ResponseEntity<>(gson.toJson(response), HttpStatus.NOT_FOUND);
