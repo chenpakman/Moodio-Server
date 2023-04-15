@@ -21,7 +21,7 @@ public class PlaylistByEmotionController {
     @Value("${project.image}")
     private String path;
     private SpotifyApiManager spotifyApiManager=new SpotifyApiManager();
-    ResponseServer response ;
+    //ResponseServer response ;
     String emotion;
 
     @PostMapping(value = "/app")
@@ -30,7 +30,7 @@ public class PlaylistByEmotionController {
         Gson gson = new Gson();
         boolean isRelaxing = false;
         boolean isHappy = false;
-        this.response = new ResponseServer();
+        ResponseServer response = new ResponseServer();
 
         try {
 
@@ -41,7 +41,7 @@ public class PlaylistByEmotionController {
 
                 this.emotion =
                         resEmotion.replace(resEmotion.charAt(0), resEmotion.substring(0,1).toUpperCase().charAt(0));
-                this.response.setEmotion(this.emotion);
+                response.setEmotion(this.emotion);
 
                 switch(this.emotion){
 
@@ -50,12 +50,12 @@ public class PlaylistByEmotionController {
                         break;
                     case "Sad":
                         String sadUrl = this.spotifyApiManager.getPlaylistUrl("Sad Soft");
-                        this.response.addPlaylistUrl("Sad", sadUrl);
+                        response.addPlaylistUrl("Sad", sadUrl);
                         isHappy = true;
                         break;
                     case "Angry":
                         String angryUrl = this.spotifyApiManager.getPlaylistUrl("Angry");
-                        this.response.addPlaylistUrl("Angry", angryUrl);
+                        response.addPlaylistUrl("Angry", angryUrl);
                         isRelaxing = true;
                         break;
                     case "Happy":
@@ -67,14 +67,14 @@ public class PlaylistByEmotionController {
                 }
 
                 if(isRelaxing){
-                    this.response.setPlaylistUrl(this.spotifyApiManager.getPlaylistUrl("Relaxing"));
+                    response.setPlaylistUrl(this.spotifyApiManager.getPlaylistUrl("Relaxing"));
                     String relaxingUrl = this.spotifyApiManager.getPlaylistUrl("Relaxing");
-                    this.response.addPlaylistUrl("Relaxing", relaxingUrl);
+                    response.addPlaylistUrl("Relaxing", relaxingUrl);
                 }
                 if(isHappy){
-                    this.response.setPlaylistUrl(this.spotifyApiManager.getPlaylistUrl("Happy"));
+                    response.setPlaylistUrl(this.spotifyApiManager.getPlaylistUrl("Happy"));
                     String happyUrl = this.spotifyApiManager.getPlaylistUrl("Happy");
-                    this.response.addPlaylistUrl("Happy", happyUrl);
+                    response.addPlaylistUrl("Happy", happyUrl);
                 }
 
                 return new ResponseEntity<>(gson.toJson(response), HttpStatus.OK);
@@ -93,10 +93,12 @@ public class PlaylistByEmotionController {
     }
 
     @PutMapping(value = "/app")
-    public ResponseEntity<String> getPlayListsWithoutDeepFace(@RequestParam ("emotions") String emotions) throws IOException {
+    public ResponseEntity<String> getPlayListsWithoutDeepFace(@RequestParam (name = "emotions") String emotions) throws IOException {
         Gson gson = new Gson();
         String playlistUrl = this.spotifyApiManager.getPlaylistUrl(emotions);
-        this.response.addPlaylistUrl(emotion, playlistUrl);
+        ResponseServer response = new ResponseServer();
+        response.setPlaylistUrl(playlistUrl);
+        response.addPlaylistUrl(emotions, playlistUrl);
         return new ResponseEntity<>(gson.toJson(response), HttpStatus.OK);
     }
 
