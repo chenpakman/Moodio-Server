@@ -92,13 +92,41 @@ public class PlaylistByEmotionController {
 
     }
 
+    //Aware of the fact that this and the method above are similar. will take care of it
     @PutMapping(value = "/app")
     public ResponseEntity<String> getPlayListsWithoutDeepFace(@RequestParam (name = "emotions") String emotions) throws IOException {
         Gson gson = new Gson();
-        String playlistUrl = this.spotifyApiManager.getPlaylistUrl(emotions);
+        boolean isRelaxing = false;
+        boolean isHappy = false;
         ResponseServer response = new ResponseServer();
-        response.setPlaylistUrl(playlistUrl);
-        response.addPlaylistUrl(emotions, playlistUrl);
+        if (emotions.contains("Sad")) {
+            String sadUrl = this.spotifyApiManager.getPlaylistUrl("Sad Soft");
+            response.addPlaylistUrl("Sad", sadUrl);
+            isHappy = true;
+        }
+        if (emotions.contains("Fear") || emotions.contains("Nervous")) {
+            isRelaxing = true;
+        }
+        if (emotions.contains("Angry")) {
+            isRelaxing = true;
+            String angryUrl = this.spotifyApiManager.getPlaylistUrl("Angry");
+            response.addPlaylistUrl("Angry", angryUrl);
+        }
+        if (emotions.contains("Happy") || emotions.contains("Exited")){
+            isHappy = true;
+        }
+
+        if(isRelaxing){
+            response.setPlaylistUrl(this.spotifyApiManager.getPlaylistUrl("Relaxing"));
+            String relaxingUrl = this.spotifyApiManager.getPlaylistUrl("Relaxing");
+            response.addPlaylistUrl("Relaxing", relaxingUrl);
+        }
+        if(isHappy){
+            response.setPlaylistUrl(this.spotifyApiManager.getPlaylistUrl("Happy"));
+            String happyUrl = this.spotifyApiManager.getPlaylistUrl("Happy");
+            response.addPlaylistUrl("Happy", happyUrl);
+        }
+
         return new ResponseEntity<>(gson.toJson(response), HttpStatus.OK);
     }
 
