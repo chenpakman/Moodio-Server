@@ -22,14 +22,12 @@ public class PlaylistByEmotionController {
     private String path;
     private SpotifyApiManager spotifyApiManager=new SpotifyApiManager();
     //ResponseServer response ;
-    String emotion;
+    //String emotion;
 
     @PostMapping(value = "/app")
     public ResponseEntity<String> fileUpload(@RequestParam("image") MultipartFile image) {
         System.out.println("Here");//TODO:delete
         Gson gson = new Gson();
-        boolean isRelaxing = false;
-        boolean isHappy = false;
         ResponseServer response = new ResponseServer();
 
         try {
@@ -39,66 +37,27 @@ public class PlaylistByEmotionController {
             if (null != resEmotion && !resEmotion.isEmpty()) {
                 System.out.println(resEmotion); //TODO:delete
 
-                this.emotion =
+                resEmotion =
                         resEmotion.replace(resEmotion.charAt(0), resEmotion.substring(0,1).toUpperCase().charAt(0));
-                response.setEmotion(this.emotion);
 
-                switch(this.emotion){
-
-                    case "Fear":
-                        isRelaxing = true;
-                        break;
-                    case "Sad":
-                        String sadUrl = this.spotifyApiManager.getPlaylistUrl("Sad Soft");
-                        response.addPlaylistUrl("Sad", sadUrl);
-                        isHappy = true;
-                        break;
-                    case "Angry":
-                        String angryUrl = this.spotifyApiManager.getPlaylistUrl("Angry");
-                        response.addPlaylistUrl("Angry", angryUrl);
-                        isRelaxing = true;
-                        break;
-                    case "Happy":
-                        isHappy = true;
-                        break;
-                    default:
-                        response.setError(Errors.getInvalidImage());
-                        return new ResponseEntity<>(gson.toJson(response), HttpStatus.NO_CONTENT);
-                }
-
-                if(isRelaxing){
-                    response.setPlaylistUrl(this.spotifyApiManager.getPlaylistUrl("Relaxing"));
-                    String relaxingUrl = this.spotifyApiManager.getPlaylistUrl("Relaxing");
-                    response.addPlaylistUrl("Relaxing", relaxingUrl);
-                }
-                if(isHappy){
-                    response.setPlaylistUrl(this.spotifyApiManager.getPlaylistUrl("Happy"));
-                    String happyUrl = this.spotifyApiManager.getPlaylistUrl("Happy");
-                    response.addPlaylistUrl("Happy", happyUrl);
-                }
-
-                return new ResponseEntity<>(gson.toJson(response), HttpStatus.OK);
+                return getPlayListsWithoutDeepFace(resEmotion);
             } else {
                 response.setError(Errors.getInvalidImage());
                 return new ResponseEntity<>(gson.toJson(response), HttpStatus.NO_CONTENT);
             }
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e ) {
             response.setError(e.getMessage());
             return new ResponseEntity<>(gson.toJson(response), HttpStatus.NO_CONTENT);
-
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
         }
-
     }
 
-    //Aware of the fact that this and the method above are similar. will take care of it
     @PutMapping(value = "/app")
     public ResponseEntity<String> getPlayListsWithoutDeepFace(@RequestParam (name = "emotions") String emotions) throws IOException {
         Gson gson = new Gson();
         boolean isRelaxing = false;
         boolean isHappy = false;
         ResponseServer response = new ResponseServer();
+
         if (emotions.contains("Sad")) {
             String sadUrl = this.spotifyApiManager.getPlaylistUrl("Sad Soft");
             response.addPlaylistUrl("Sad", sadUrl);
