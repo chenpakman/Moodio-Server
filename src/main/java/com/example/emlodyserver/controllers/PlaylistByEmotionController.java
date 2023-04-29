@@ -85,10 +85,7 @@ public class PlaylistByEmotionController {
         return new ResponseEntity<>(gson.toJson(response), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/app")
-    public void fileUpload() {
 
-    }
 
 
 
