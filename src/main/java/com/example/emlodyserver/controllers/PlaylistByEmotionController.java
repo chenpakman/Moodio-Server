@@ -20,7 +20,7 @@ public class PlaylistByEmotionController {
     private FileService fileService;
     @Value("${project.image}")
     private String path;
-    private SpotifyApiManager spotifyApiManager=new SpotifyApiManager();
+    private final SpotifyApiManager spotifyApiManager=new SpotifyApiManager();
 
 
     @PostMapping(value = "/app")
@@ -86,7 +86,7 @@ public class PlaylistByEmotionController {
     }
 
     @GetMapping(value = "/app")
-    public void fileUpload() throws IOException {
+    public void fileUpload() {
 
     }
 
