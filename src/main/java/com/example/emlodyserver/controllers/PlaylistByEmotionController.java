@@ -20,13 +20,11 @@ public class PlaylistByEmotionController {
     private FileService fileService;
     @Value("${project.image}")
     private String path;
-    private SpotifyApiManager spotifyApiManager=new SpotifyApiManager();
-    //ResponseServer response ;
-    //String emotion;
+    private final SpotifyApiManager spotifyApiManager=new SpotifyApiManager();
+
 
     @PostMapping(value = "/app")
     public ResponseEntity<String> fileUpload(@RequestParam("image") MultipartFile image) {
-        System.out.println("Here");//TODO:delete
         Gson gson = new Gson();
         ResponseServer response = new ResponseServer();
 
@@ -35,8 +33,6 @@ public class PlaylistByEmotionController {
             String resEmotion = this.fileService.getEmotionByImage(path, image);
 
             if (null != resEmotion && !resEmotion.isEmpty()) {
-                System.out.println(resEmotion); //TODO:delete
-
                 resEmotion =
                         resEmotion.replace(resEmotion.charAt(0), resEmotion.substring(0,1).toUpperCase().charAt(0));
 
@@ -89,13 +85,9 @@ public class PlaylistByEmotionController {
         return new ResponseEntity<>(gson.toJson(response), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/app")
-    public void fileUpload() throws IOException {
 
-    }
 
 
 
 
 }
-
