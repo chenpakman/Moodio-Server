@@ -24,9 +24,12 @@ import java.util.Scanner;
 public class FileService {
     public String getEmotionByImage(String path, MultipartFile file) throws IOException, InterruptedException {
         String filePath= saveImage(path,file);
-        ProcessBuilder pb = new ProcessBuilder("python","emotion_identifier.py",filePath);
+        ProcessBuilder pb = new ProcessBuilder("emotion_identifier\\emotion_identifier.exe",filePath);
+        long start=System.currentTimeMillis();
         Process p = pb.start();
         p.waitFor();
+        long end=System.currentTimeMillis();
+        System.out.println("time!"+(end-start));
         StringBuilder builder = new StringBuilder();
         BufferedReader bfr = new BufferedReader(new InputStreamReader(p.getInputStream()));
         String line = "";
