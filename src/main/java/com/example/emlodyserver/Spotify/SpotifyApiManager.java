@@ -1,5 +1,6 @@
 package com.example.emlodyserver.Spotify;
 
+import com.example.emlodyserver.Playlist;
 import com.example.emlodyserver.Response.Errors;
 import okhttp3.*;
 import org.json.simple.JSONArray;
@@ -14,7 +15,9 @@ public class SpotifyApiManager {
     private final String CLIENT_ID="a7bff5059afb4b969966df56c651f6e8";
     private final String CLIENT_SECRET="24d87c25cc524e59ba0fa5b4d36cd157";
 
-    public String getPlaylistUrl(String emotion) throws IOException {
+    private String imageUrl;
+
+    public Playlist getPlaylistUrl(String emotion) throws IOException {
         String token=getSpotifyAccessToken();
         if(token!=null) {
             OkHttpClient client = new OkHttpClient();
@@ -72,15 +75,18 @@ public class SpotifyApiManager {
         }
         return null;
     }
-    private String getPlaylistUrlFromJson(String jsonString) throws Exception {
+    private Playlist getPlaylistUrlFromJson(String jsonString) throws Exception {
+        String imageUrl;
         JSONParser parser = new JSONParser();
         JSONObject jsonResponse = (JSONObject) parser.parse(jsonString);
         JSONObject jsonObject=new JSONObject(jsonResponse);
         JSONObject playlists= getJsonPlaylists(jsonObject);
         JSONArray items= getJsonItems(playlists);
         JSONObject urls= getJsonExternalUrls(items);
-        String playlist= getJsonPlaylistUrls(urls);
-        System.out.println(playlist);
+        imageUrl=getImageUrl(items);
+        String playlistUrl= getJsonPlaylistUrls(urls);
+        System.out.println(playlistUrl);
+        Playlist playlist=new Playlist(playlistUrl,imageUrl);
         return playlist;
 
     }
@@ -96,6 +102,10 @@ public class SpotifyApiManager {
         }
         throw new Exception(Errors.getSomethingWentWrong());
     }
+    private String getImageUrl(JSONArray spotifyJson){
+        return  (String) ((JSONObject)((JSONArray)((JSONObject) spotifyJson.get(0)).get("images")).get(0)).get("url");
+
+    }
     private JSONObject getJsonExternalUrls(JSONArray spotifyJson) throws Exception {
         if(spotifyJson!=null){
             return  (JSONObject) ((JSONObject) spotifyJson.get(0)).get("external_urls");
@@ -107,5 +117,8 @@ public class SpotifyApiManager {
             return  (String) spotifyJson.get("spotify");
         }
         throw new Exception(Errors.getSomethingWentWrong());
+    }
+    public String getImagePlaylistUrl() throws IOException {
+        return imageUrl;
     }
 }

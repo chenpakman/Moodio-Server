@@ -1,5 +1,6 @@
 package com.example.emlodyserver.controllers;
 
+import com.example.emlodyserver.Playlist;
 import com.example.emlodyserver.Response.Errors;
 import com.example.emlodyserver.Response.ResponseServer;
 import com.example.emlodyserver.Spotify.SpotifyApiManager;
@@ -53,10 +54,10 @@ public class PlaylistByEmotionController {
         boolean isRelaxing = false;
         boolean isHappy = false;
         ResponseServer response = new ResponseServer();
-
+        response.setEmotion(emotions);
         if (emotions.contains("Sad")) {
-            String sadUrl = this.spotifyApiManager.getPlaylistUrl("Sad Soft");
-            response.addPlaylistUrl("Sad", sadUrl);
+            Playlist sadUrl = this.spotifyApiManager.getPlaylistUrl("Sad Soft");
+            response.addPlaylist("Sad", sadUrl);
             isHappy = true;
         }
         if (emotions.contains("Fear") || emotions.contains("Nervous")) {
@@ -64,28 +65,26 @@ public class PlaylistByEmotionController {
         }
         if (emotions.contains("Angry")) {
             isRelaxing = true;
-            String angryUrl = this.spotifyApiManager.getPlaylistUrl("Angry");
-            response.addPlaylistUrl("Angry", angryUrl);
+            Playlist angryUrl = this.spotifyApiManager.getPlaylistUrl("Angry");
+            response.addPlaylist("Angry", angryUrl);
         }
         if (emotions.contains("Happy") || emotions.contains("Exited")){
             isHappy = true;
         }
 
         if(isRelaxing){
-            response.setPlaylistUrl(this.spotifyApiManager.getPlaylistUrl("Relaxing"));
-            String relaxingUrl = this.spotifyApiManager.getPlaylistUrl("Relaxing");
-            response.addPlaylistUrl("Relaxing", relaxingUrl);
+            response.setPlaylistUrl(this.spotifyApiManager.getPlaylistUrl("Relaxing").getPlaylistUrl());
+            Playlist relaxingUrl = this.spotifyApiManager.getPlaylistUrl("Relaxing");
+            response.addPlaylist("Relaxing", relaxingUrl);
         }
         if(isHappy){
-            response.setPlaylistUrl(this.spotifyApiManager.getPlaylistUrl("Happy"));
-            String happyUrl = this.spotifyApiManager.getPlaylistUrl("Happy");
-            response.addPlaylistUrl("Happy", happyUrl);
+            response.setPlaylistUrl(this.spotifyApiManager.getPlaylistUrl("Happy").getPlaylistUrl());
+            Playlist happyUrl = this.spotifyApiManager.getPlaylistUrl("Happy");
+            response.addPlaylist("Happy", happyUrl);
         }
 
         return new ResponseEntity<>(gson.toJson(response), HttpStatus.OK);
     }
-
-
 
 
 

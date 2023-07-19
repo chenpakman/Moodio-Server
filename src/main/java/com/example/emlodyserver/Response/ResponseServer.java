@@ -1,14 +1,19 @@
 package com.example.emlodyserver.Response;
 
+import com.example.emlodyserver.Playlist;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class ResponseServer {
-    Map<String, String> playlistsUrls;
+    Map<String, Playlist> playlistsUrls;
     String playlistUrl;
     String error;
     String emotion;
-
+    String imageUrl;
+    public void setImageUrl(String imageUrl){
+        this.imageUrl=imageUrl;
+    }
     public void setEmotion(String emotion) {
         this.emotion = emotion;
     }
@@ -33,15 +38,16 @@ public class ResponseServer {
         return playlistUrl;
     }
 
-    public Map<String, String> getPlaylistsUrls() {
+    public Map<String, Playlist> getPlaylistsUrls() {
         return playlistsUrls;
     }
 
-    public void addPlaylistUrl(String emotion, String playlistUrl) {
+    public void addPlaylist(String emotion, Playlist playlist) {
+
         if(null == this.playlistsUrls){
             this.playlistsUrls = new HashMap<>();
         }
 
-        this.playlistsUrls.put(emotion, playlistUrl);
+        this.playlistsUrls.put(emotion, playlist);
     }
 }
