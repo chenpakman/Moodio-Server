@@ -1,6 +1,6 @@
-package com.example.emlodyserver.Response;
+package com.example.moodioerver.Response;
 
-import com.example.emlodyserver.Playlist;
+import com.example.moodioerver.Playlist;
 
 import java.util.HashMap;
 import java.util.Map;

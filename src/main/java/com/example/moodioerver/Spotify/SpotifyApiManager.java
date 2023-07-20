@@ -1,7 +1,7 @@
-package com.example.emlodyserver.Spotify;
+package com.example.moodioerver.Spotify;
 
-import com.example.emlodyserver.Playlist;
-import com.example.emlodyserver.Response.Errors;
+import com.example.moodioerver.Playlist;
+import com.example.moodioerver.Response.Errors;
 import okhttp3.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;

@@ -1,9 +1,9 @@
-package com.example.emlodyserver.controllers;
+package com.example.moodioerver.controllers;
 
-import com.example.emlodyserver.Playlist;
-import com.example.emlodyserver.Response.Errors;
-import com.example.emlodyserver.Response.ResponseServer;
-import com.example.emlodyserver.Spotify.SpotifyApiManager;
+import com.example.moodioerver.Playlist;
+import com.example.moodioerver.Response.Errors;
+import com.example.moodioerver.Response.ResponseServer;
+import com.example.moodioerver.Spotify.SpotifyApiManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;

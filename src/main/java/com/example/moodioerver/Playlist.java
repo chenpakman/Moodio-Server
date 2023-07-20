@@ -1,4 +1,4 @@
-package com.example.emlodyserver;
+package com.example.moodioerver;
 
 public class Playlist {
     String playlistUrl;

@@ -1,4 +1,4 @@
-package com.example.emlodyserver.Response;
+package com.example.moodioerver.Response;
 
 public class Errors {
 
