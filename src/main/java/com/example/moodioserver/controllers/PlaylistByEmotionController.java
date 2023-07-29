@@ -1,9 +1,9 @@
-package com.example.moodioerver.controllers;
+package com.example.moodioserver.controllers;
 
-import com.example.moodioerver.Playlist;
-import com.example.moodioerver.Response.Errors;
-import com.example.moodioerver.Response.ResponseServer;
-import com.example.moodioerver.Spotify.SpotifyApiManager;
+import com.example.moodioserver.Playlist;
+import com.example.moodioserver.Response.Errors;
+import com.example.moodioserver.Response.ResponseServer;
+import com.example.moodioserver.Spotify.SpotifyApiManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -28,7 +28,7 @@ public class PlaylistByEmotionController {
     public ResponseEntity<String> fileUpload(@RequestParam("image") MultipartFile image) {
         Gson gson = new Gson();
         ResponseServer response = new ResponseServer();
-
+        System.out.println(path + " " + image );
         try {
 
             String resEmotion = this.fileService.getEmotionByImage(path, image);

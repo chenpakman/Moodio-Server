@@ -1,4 +1,4 @@
-package com.example.moodioerver.controllers;
+package com.example.moodioserver.controllers;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -6,7 +6,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -37,13 +39,23 @@ public class FileService {
         if(!newFile.exists()){
             newFile.mkdir();
         }
+        Path ofImage = Path.of(filePath);
         try {
-            Files.copy(file.getInputStream(), Paths.get(filePath));
+            Files.copy(file.getInputStream(), ofImage);
+        } catch (FileAlreadyExistsException e) {
+            // Destination file already exists, delete it and then copy
+            try {
+                Files.delete(ofImage);
+                Files.copy(file.getInputStream(), ofImage);
+                System.out.println("File copied successfully after deleting the existing file.");
+            } catch (IOException ex) {
+                System.out.println("Error occurred while deleting the existing file: " + ex.getMessage());
+            }
+        }catch (IOException e) {
+            System.out.println("An error occurred while copying the file: " + e.getMessage());
         }
-        catch (IOException e){
-            System.out.println("Error: "+e);
 
-        }
+
         return filePath;
     }
 
@@ -51,8 +63,9 @@ public class FileService {
     private String getImageName(){
         SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMdd_HHmmss");
         String imageName;
-       imageName="IMG"+ sdf.format(new Date())+".jpg";
-       return imageName;
+        imageName="IMG"+ sdf.format(new Date())+".jpg";
+
+        return imageName;
 
     }
 

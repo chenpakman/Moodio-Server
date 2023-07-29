@@ -1,6 +1,6 @@
-package com.example.moodioerver.Response;
+package com.example.moodioserver.Response;
 
-import com.example.moodioerver.Playlist;
+import com.example.moodioserver.Playlist;
 
 import java.util.HashMap;
 import java.util.Map;
