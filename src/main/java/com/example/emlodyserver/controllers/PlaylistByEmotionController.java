@@ -1,5 +1,6 @@
 package com.example.emlodyserver.controllers;
 
+import com.example.emlodyserver.HeartbeatSimulator;
 import com.example.emlodyserver.Playlist;
 import com.example.emlodyserver.Response.Errors;
 import com.example.emlodyserver.Response.ResponseServer;
@@ -22,16 +23,18 @@ public class PlaylistByEmotionController {
     @Value("${project.image}")
     private String path;
     private final SpotifyApiManager spotifyApiManager=new SpotifyApiManager();
+    HeartbeatSimulator heartbeatSimulator=new HeartbeatSimulator();
 
 
     @PostMapping(value = "/app")
     public ResponseEntity<String> fileUpload(@RequestParam("image") MultipartFile image) {
+        System.out.println("heartbeatSimulator.getHeartbeatFromFile();->"+ heartbeatSimulator.getHeartbeatFromFile());
         Gson gson = new Gson();
         ResponseServer response = new ResponseServer();
-
         try {
 
             String resEmotion = this.fileService.getEmotionByImage(path, image);
+            //this.fileService.getHeartbeatFromFile();
 
             if (null != resEmotion && !resEmotion.isEmpty()) {
                 resEmotion =
@@ -42,51 +45,72 @@ public class PlaylistByEmotionController {
                 response.setError(Errors.getInvalidImage());
                 return new ResponseEntity<>(gson.toJson(response), HttpStatus.NO_CONTENT);
             }
-        } catch (IOException | InterruptedException e ) {
+        } catch (IOException e ) {
             response.setError(e.getMessage());
             return new ResponseEntity<>(gson.toJson(response), HttpStatus.NO_CONTENT);
         }
     }
 
+        @GetMapping(value = "/test")
+    public String test() {
+       return "success";
+    }
+
     @PutMapping(value = "/app")
     public ResponseEntity<String> getPlayListsWithoutDeepFace(@RequestParam (name = "emotions") String emotions) throws IOException {
         Gson gson = new Gson();
-        boolean isRelaxing = false;
-        boolean isHappy = false;
         ResponseServer response = new ResponseServer();
+        boolean isHeartbeatHigh=heartbeatSimulator.isHeartbeatHigh();
         response.setEmotion(emotions);
-        if (emotions.contains("Sad")) {
-            Playlist sadUrl = this.spotifyApiManager.getPlaylistUrl("Sad Soft");
-            response.addPlaylist("Sad", sadUrl);
-            isHappy = true;
+        if(isHeartbeatHigh){
+            addPlaylistHighHeartbeat(emotions,response);
         }
-        if (emotions.contains("Fear") || emotions.contains("Nervous")) {
-            isRelaxing = true;
-        }
-        if (emotions.contains("Angry")) {
-            isRelaxing = true;
-            Playlist angryUrl = this.spotifyApiManager.getPlaylistUrl("Angry");
-            response.addPlaylist("Angry", angryUrl);
-        }
-        if (emotions.contains("Happy") || emotions.contains("Exited")){
-            isHappy = true;
-        }
-
-        if(isRelaxing){
-            response.setPlaylistUrl(this.spotifyApiManager.getPlaylistUrl("Relaxing").getPlaylistUrl());
-            Playlist relaxingUrl = this.spotifyApiManager.getPlaylistUrl("Relaxing");
-            response.addPlaylist("Relaxing", relaxingUrl);
-        }
-        if(isHappy){
-            response.setPlaylistUrl(this.spotifyApiManager.getPlaylistUrl("Happy").getPlaylistUrl());
-            Playlist happyUrl = this.spotifyApiManager.getPlaylistUrl("Happy");
-            response.addPlaylist("Happy", happyUrl);
+        else{
+            addPlaylistNormalHeartbeat(emotions,response);
         }
 
         return new ResponseEntity<>(gson.toJson(response), HttpStatus.OK);
     }
+private void addPlaylistHighHeartbeat(String emotions,ResponseServer response) throws IOException {
+    if (emotions.contains("Sad")||emotions.contains("Fear") || emotions.contains("Nervous")) {
+        Playlist sadUrl = this.spotifyApiManager.getPlaylistUrl("anti anxiety");
+        response.addPlaylist("Anxiety", sadUrl);
+    }
+    if (emotions.contains("Angry")) {
+        Playlist metalUrl = this.spotifyApiManager.getPlaylistUrl("angry metal");
+        response.addPlaylist("metal", metalUrl);
+        Playlist calmUrl = this.spotifyApiManager.getPlaylistUrl("angry calm");
+        response.addPlaylist("Calm", calmUrl);
+    }
+    if (emotions.contains("Happy") || emotions.contains("Exited")){
+        Playlist metalUrl = this.spotifyApiManager.getPlaylistUrl("high energy");
+        response.addPlaylist("Energy", metalUrl);
+    }
 
+}
+    private void addPlaylistNormalHeartbeat(String emotions,ResponseServer response) throws IOException {
+        if (emotions.contains("Sad")) {
+            Playlist sadUrl = this.spotifyApiManager.getPlaylistUrl("sad");
+            response.addPlaylist("Sad", sadUrl);
+            Playlist cheerUrl = this.spotifyApiManager.getPlaylistUrl("cheerful uplifting");
+            response.addPlaylist("Cheerful", cheerUrl);
+        }
+        if (emotions.contains("Fear") || emotions.contains("Nervous")) {
+            Playlist calmUrl = this.spotifyApiManager.getPlaylistUrl("calm slow");
+            response.addPlaylist("Calm", calmUrl);
+        }
+        if (emotions.contains("Angry")) {
+            Playlist angryUrl = this.spotifyApiManager.getPlaylistUrl("angry");
+            response.addPlaylist("Angry", angryUrl);
+            Playlist relaxingUrl = this.spotifyApiManager.getPlaylistUrl("relaxing");
+            response.addPlaylist("Relaxing", relaxingUrl);
+        }
+        if (emotions.contains("Happy") || emotions.contains("Exited")){
+            Playlist happyUrl = this.spotifyApiManager.getPlaylistUrl("Happy");
+            response.addPlaylist("Happy", happyUrl);
+        }
 
+    }
 
 
 }
