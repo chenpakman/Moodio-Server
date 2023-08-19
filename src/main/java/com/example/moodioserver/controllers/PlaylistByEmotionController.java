@@ -28,7 +28,7 @@ public class PlaylistByEmotionController {
     public ResponseEntity<String> fileUpload(@RequestParam("image") MultipartFile image) {
         Gson gson = new Gson();
         ResponseServer response = new ResponseServer();
-        System.out.println(path + " " + image );
+        System.out.println("Uploaded image file");
         try {
 
             String resEmotion = this.fileService.getEmotionByImage(path, image);
@@ -36,16 +36,24 @@ public class PlaylistByEmotionController {
             if (null != resEmotion && !resEmotion.isEmpty()) {
                 resEmotion =
                         resEmotion.replace(resEmotion.charAt(0), resEmotion.substring(0,1).toUpperCase().charAt(0));
-
+                System.out.println("Detected: " + resEmotion);
                 return getPlayListsWithoutDeepFace(resEmotion);
             } else {
                 response.setError(Errors.getInvalidImage());
+                System.out.println("No emotion Detected" + response.getError());
+
                 return new ResponseEntity<>(gson.toJson(response), HttpStatus.NO_CONTENT);
             }
         } catch (IOException | InterruptedException e ) {
             response.setError(e.getMessage());
+            System.out.println("No emotion Detected" + response.getError());
             return new ResponseEntity<>(gson.toJson(response), HttpStatus.NO_CONTENT);
         }
+    }
+
+    @GetMapping(value = "/token")
+    public ResponseEntity<String> getSpotifyAccessToken() {
+        return new ResponseEntity<>(spotifyApiManager.getSpotifyAccessToken(), HttpStatus.OK);
     }
 
     @PutMapping(value = "/app")
@@ -55,9 +63,11 @@ public class PlaylistByEmotionController {
         boolean isHappy = false;
         ResponseServer response = new ResponseServer();
         response.setEmotion(emotions);
+        System.out.println("Here");
+
         if (emotions.contains("Sad")) {
-            Playlist sadUrl = this.spotifyApiManager.getPlaylistUrl("Sad Soft");
-            response.addPlaylist("Sad", sadUrl);
+            Playlist sadPlaylist = this.spotifyApiManager.getPlaylistUrl("Sad Soft");
+            response.addPlaylist("Sad", sadPlaylist);
             isHappy = true;
         }
         if (emotions.contains("Fear") || emotions.contains("Nervous")) {
@@ -73,15 +83,17 @@ public class PlaylistByEmotionController {
         }
 
         if(isRelaxing){
-            response.setPlaylistUrl(this.spotifyApiManager.getPlaylistUrl("Relaxing").getPlaylistUrl());
-            Playlist relaxingUrl = this.spotifyApiManager.getPlaylistUrl("Relaxing");
-            response.addPlaylist("Relaxing", relaxingUrl);
+            Playlist relaxingPlaylist = this.spotifyApiManager.getPlaylistUrl("Relaxing");
+            response.setPlaylistUrl(relaxingPlaylist.getPlaylistUrl());
+            response.addPlaylist("Relaxing", relaxingPlaylist);
         }
         if(isHappy){
-            response.setPlaylistUrl(this.spotifyApiManager.getPlaylistUrl("Happy").getPlaylistUrl());
-            Playlist happyUrl = this.spotifyApiManager.getPlaylistUrl("Happy");
+            Playlist happyUrl = this.spotifyApiManager.getPlaylistUrl("Feel Happy");
+            response.setPlaylistUrl(happyUrl.getPlaylistUrl());
             response.addPlaylist("Happy", happyUrl);
         }
+
+        System.out.println(response.getPlaylistUrl());
 
         return new ResponseEntity<>(gson.toJson(response), HttpStatus.OK);
     }
