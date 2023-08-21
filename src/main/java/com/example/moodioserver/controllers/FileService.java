@@ -1,11 +1,9 @@
-package com.example.emlodyserver.controllers;
+package com.example.moodioserver.controllers;
+import com.opencsv.CSVReader;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -15,28 +13,49 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
+
 @Service
 public class FileService {
-    public String getEmotionByImage(String path, MultipartFile file) throws IOException, InterruptedException {
+     private String directoryPath = "/home/ubuntu/moodio/";
+     private int rowNum=1;
+    public String getEmotionByImage(String path, MultipartFile file){
         String filePath= saveImage(path,file);
         ProcessBuilder pb = new ProcessBuilder("emotion_identifier\\emotion_identifier.exe",filePath);
+        //ProcessBuilder pb = new ProcessBuilder("./emotion_identifier",filePath);
+       // pb.directory(new File(directoryPath+"dist/emotion_identifier"));
         long start=System.currentTimeMillis();
-        Process p = pb.start();
-        p.waitFor();
+        try {
+            Process p = pb.start();
+            p.waitFor();
+
+
         long end=System.currentTimeMillis();
         System.out.println("time!"+(end-start));
         StringBuilder builder = new StringBuilder();
         BufferedReader bfr = new BufferedReader(new InputStreamReader(p.getInputStream()));
         String line = "";
-        while ((line = bfr.readLine()) != null) {
+        while (true) {
+            try {
+                if (!((line = bfr.readLine()) != null)) break;
+            } catch (IOException e) {
+                System.out.println("error2"+e.getMessage());
+            }
             builder.append(line);
         }
-        File f= new File(filePath);
-        f.delete();
-        return builder.toString();
+        //File f= new File(filePath);
+        //f.delete();
+            return builder.toString();
+        } catch (IOException | InterruptedException e) {
+            System.out.println("error"+e.getMessage());
+        }
+        return null;
+
     }
     private String saveImage(String path, MultipartFile file){
-        String filePath=path+ File.separator+getImageName();
+        //for prod:
+        //String filePath=directoryPath+path+getImageName();
+        //for test:
+        String filePath=path+getImageName();
         File newFile=new File(path);
         if(!newFile.exists()){
             newFile.mkdir();
@@ -48,6 +67,7 @@ public class FileService {
             System.out.println("Error: "+e);
 
         }
+        System.out.println("filePath"+filePath);
         return filePath;
     }
 
