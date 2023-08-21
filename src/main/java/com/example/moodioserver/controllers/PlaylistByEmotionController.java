@@ -1,10 +1,10 @@
-package com.example.emlodyserver.controllers;
+package com.example.moodioserver.controllers;
 
-import com.example.emlodyserver.HeartbeatSimulator;
-import com.example.emlodyserver.Playlist;
-import com.example.emlodyserver.Response.Errors;
-import com.example.emlodyserver.Response.ResponseServer;
-import com.example.emlodyserver.Spotify.SpotifyApiManager;
+import com.example.moodioserver.HeartbeatSimulator;
+import com.example.moodioserver.Playlist;
+import com.example.moodioserver.Response.Errors;
+import com.example.moodioserver.Response.ResponseServer;
+import com.example.moodioserver.Spotify.SpotifyApiManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -34,9 +34,10 @@ public class PlaylistByEmotionController {
         try {
 
             String resEmotion = this.fileService.getEmotionByImage(path, image);
+            System.out.println("resEmotion="+resEmotion);
             //this.fileService.getHeartbeatFromFile();
 
-            if (null != resEmotion && !resEmotion.isEmpty()) {
+            if (null != resEmotion && !resEmotion.isEmpty()&&(!resEmotion.equals("neutral"))) {
                 resEmotion =
                         resEmotion.replace(resEmotion.charAt(0), resEmotion.substring(0,1).toUpperCase().charAt(0));
 
@@ -47,6 +48,7 @@ public class PlaylistByEmotionController {
             }
         } catch (IOException e ) {
             response.setError(e.getMessage());
+            System.out.println(e.getMessage());
             return new ResponseEntity<>(gson.toJson(response), HttpStatus.NO_CONTENT);
         }
     }

@@ -1,4 +1,4 @@
-package com.example.emlodyserver;
+package com.example.moodioserver;
 
 
 import com.opencsv.CSVParser;
@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 public class HeartbeatSimulator {
 
-    private final String filePath="C:\\Users\\chen3\\IdeaProjects\\EmlodyServer\\src\\main\\java\\com\\example\\emlodyserver\\HR.csv";
+    private final String filePath="C:\\Users\\chen3\\IdeaProjects\\Moodio-Server\\src\\main\\java\\com\\example\\moodioserver\\HR.csv";
     private float expectedHeartbeat;
     private int numOfHeartbeatMeasurements;
     private float sumOfHeartbeatMeasurements;

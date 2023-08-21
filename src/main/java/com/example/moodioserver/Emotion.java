@@ -1,4 +1,4 @@
-package com.example.emlodyserver;
+package com.example.moodioserver;
 
 public enum Emotion {
     ANGRY("Angry"),
