@@ -13,6 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.google.gson.Gson;
 
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 @RestController
@@ -30,7 +32,7 @@ public class PlaylistByEmotionController {
         ResponseServer response = new ResponseServer();
         System.out.println("Uploaded image file");
         try {
-
+            savaToLocal(image);
             String resEmotion = this.fileService.getEmotionByImage(path, image);
 
             if (null != resEmotion && !resEmotion.isEmpty()) {
@@ -48,6 +50,36 @@ public class PlaylistByEmotionController {
             response.setError(e.getMessage());
             System.out.println("No emotion Detected" + response.getError());
             return new ResponseEntity<>(gson.toJson(response), HttpStatus.NO_CONTENT);
+        }
+    }
+
+    private void savaToLocal(MultipartFile image) {
+        if (image.isEmpty()) {
+            System.out.println("Please upload a file");
+        }
+
+        try {
+            // Specify the directory where you want to save the image
+            String uploadDir = "C:\\Temp";
+
+            File uploadPath = new File(uploadDir);
+            if (!uploadPath.exists()) {
+                uploadPath.mkdirs();
+            }
+
+            // Generate a unique file name for the uploaded image
+            String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
+            File targetFile = new File(uploadPath, fileName);
+
+            // Save the file
+            FileOutputStream outputStream = new FileOutputStream(targetFile);
+            outputStream.write(image.getBytes());
+            outputStream.close();
+            System.out.println("File saved successfully");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Failed to save File");
+
         }
     }
 
