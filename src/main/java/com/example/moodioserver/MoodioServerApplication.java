@@ -9,6 +9,7 @@ import java.io.IOException;
 public class MoodioServerApplication {
 
     public static void main(String[] args) {
+       // ProcessBuilder pb = new ProcessBuilder("python","/home/ec2-user/download_package.py").inheritIO();
         ProcessBuilder pb = new ProcessBuilder("python","download_package.py").inheritIO();
         try {
             Process p= pb.start();

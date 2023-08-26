@@ -28,7 +28,7 @@ from deepface import DeepFace
 
 
 def detect_emotion():
-  face_analysis = DeepFace.analyze(img_path = sys.argv[1],actions = ['emotion'])
+  face_analysis = DeepFace.analyze(img_path = sys.argv[1],actions = ['emotion'],enforce_detection=True)
   print(face_analysis[0]['dominant_emotion'])
 
 """# Trigger
