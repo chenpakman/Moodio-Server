@@ -16,7 +16,7 @@ public class HeartbeatSimulator {
     private int numOfHeartbeatMeasurements;
     private float sumOfHeartbeatMeasurements;
 
-    private int currentLine=0;
+    private static int currentLine=0;
     public HeartbeatSimulator(){
         calculateExpectedHeartbeat();
     }
