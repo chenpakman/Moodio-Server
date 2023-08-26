@@ -83,11 +83,6 @@ public class PlaylistByEmotionController {
         }
     }
 
-    @GetMapping(value = "/token")
-    public ResponseEntity<String> getSpotifyAccessToken() {
-        return new ResponseEntity<>(spotifyApiManager.getSpotifyAccessToken(), HttpStatus.OK);
-    }
-
     @PutMapping(value = "/app")
     public ResponseEntity<String> getPlayListsWithoutDeepFace(@RequestParam (name = "emotions") String emotions) throws IOException {
         Gson gson = new Gson();
@@ -125,12 +120,15 @@ public class PlaylistByEmotionController {
             response.addPlaylist("Happy", happyUrl);
         }
 
+        if(emotions.contains("Neutral")){
+            response.setError("Detected Neutral emotion");
+            return new ResponseEntity<>(gson.toJson(response), HttpStatus.NO_CONTENT);
+        }
+
         System.out.println(response.getPlaylistUrl());
+
 
         return new ResponseEntity<>(gson.toJson(response), HttpStatus.OK);
     }
-
-
-
 
 }
