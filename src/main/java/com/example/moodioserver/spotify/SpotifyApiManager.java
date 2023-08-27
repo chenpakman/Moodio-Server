@@ -13,10 +13,6 @@ import java.util.Base64;
 import java.util.Objects;
 
 public class SpotifyApiManager {
-    //private final String CLIENT_ID="a7bff5059afb4b969966df56c651f6e8";
-    private final String CLIENT_ID="2e42b3849b9d491790d9abf8bf66f16e";
-    //private final String CLIENT_SECRET="24d87c25cc524e59ba0fa5b4d36cd157";
-    private final String CLIENT_SECRET="78c59d0a90a5468681e892f205e513a7";
     private String ACCESS_TOKEN = null;
     private String imageUrl;
 
