@@ -15,6 +15,8 @@ import java.util.Objects;
 public class SpotifyApiManager {
     private String ACCESS_TOKEN = null;
     private String imageUrl;
+     private final String CLIENT_SECRET = "";
+     private final String CLIENT_ID = "";
 
     public Playlist getPlaylistUrl(String emotion) throws IOException {
         ACCESS_TOKEN = getSpotifyAccessToken();
