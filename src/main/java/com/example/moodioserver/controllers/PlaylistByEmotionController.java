@@ -26,6 +26,10 @@ public class PlaylistByEmotionController {
     private FileService fileService;
     @Value("${project.image}")
     private String path;
+
+    //todo:
+    //טלי: היו לי NULLPOINTEREXCEPTIONS, חשבתי שזה קשור למקבילות אז ניסיתי להפוך את הסרבר לסטייטלס
+    //טיפלתי בשגיאות אבל לא בדקתי אם הכל עובד אם הייתי מחזירה הכל חזרה
     //private final SpotifyApiManager spotifyApiManager=new SpotifyApiManager();
     //HeartbeatSimulator heartbeatSimulator=new HeartbeatSimulator();
 
@@ -33,11 +37,11 @@ public class PlaylistByEmotionController {
     @PostMapping(value = "/app")
     public ResponseEntity<String> fileUpload(@RequestParam("image") MultipartFile image) {
         HeartbeatSimulator heartbeatSimulator = new HeartbeatSimulator();
-        System.out.println("heartbeatSimulator.getHeartbeatFromFile();->"+ heartbeatSimulator.getHeartbeatFromFile());
+        System.out.println("heartbeatSimulator.getHeartbeatFromFile();->"+ heartbeatSimulator.getHeartbeatFromFile()); //todo: delete?
         Gson gson = new Gson();
         ResponseServer response = new ResponseServer();
 
-        System.out.println("Uploaded image file");
+        //System.out.println("Uploaded image file"); todo: delete
         try {
             //savaToLocal(image);
             String resEmotion = this.fileService.getEmotionByImage(path, image);
@@ -45,20 +49,18 @@ public class PlaylistByEmotionController {
             //this.fileService.getHeartbeatFromFile();
 
             if (null != resEmotion && !resEmotion.isEmpty()) {
-                /*resEmotion =
-                        resEmotion.replace(resEmotion.charAt(0), resEmotion.substring(0,1).toUpperCase().charAt(0));*/
                 resEmotion = Character.toUpperCase(resEmotion.charAt(0)) + resEmotion.substring(1);
-                System.out.println("resEmotion="+resEmotion);
+                //System.out.println("resEmotion="+resEmotion); todo: delete
 
                 return getPlayListsWithoutDeepFace(resEmotion);
             } else {
                 response.setError(Errors.getInvalidImage());
-                System.out.println("No emotion Detected" + response.getError());
+                //System.out.println("No emotion Detected" + response.getError()); todo: delete
                 return new ResponseEntity<>(gson.toJson(response), HttpStatus.NO_CONTENT);
             }
         } catch (IOException e ) {
             response.setError(e.getMessage());
-            System.out.println("No emotion Detected" + response.getError());
+            //System.out.println("No emotion Detected" + response.getError()); todo: delete
             return new ResponseEntity<>(gson.toJson(response), HttpStatus.NO_CONTENT);
         }
     }
@@ -75,7 +77,7 @@ public class PlaylistByEmotionController {
         boolean isHeartbeatHigh=heartbeatSimulator.isHeartbeatHigh();
         String[] splitEmotions = emotions.split(" ");
         response.setEmotion(splitEmotions[0]);
-        System.out.println("resEmotion="+response.getEmotion());
+        //System.out.println("resEmotion="+response.getEmotion()); todo: delete
 
         if(isHeartbeatHigh){
             addPlaylistHighHeartbeat(emotions,response);
@@ -163,7 +165,7 @@ public class PlaylistByEmotionController {
 
     }
 
-    private void savaToLocal(MultipartFile image) {
+    /*private void savaToLocal(MultipartFile image) { todo: delete/move to utils
         if (image.isEmpty()) {
             System.out.println("Please upload a file");
         }
@@ -191,8 +193,9 @@ public class PlaylistByEmotionController {
             System.out.println("Failed to save File");
 
         }
-    }
+    }*/
 
+    // todo: enums for emotions/mix names
 
 
 

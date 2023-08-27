@@ -28,7 +28,7 @@ public class SpotifyApiManager {
             urlBuilder.addQueryParameter("q", emotion + " Mix");
             urlBuilder.addQueryParameter("type", "playlist");
             String url = urlBuilder.build().toString();
-            System.out.println(url);
+            System.out.println(url); //todo: delete?
 
             Request request = new Request.Builder()
                     .header("Authorization", "Bearer "+ACCESS_TOKEN)
@@ -68,8 +68,8 @@ public class SpotifyApiManager {
             JSONParser parser = new JSONParser();
             JSONObject jsonResponse = (JSONObject) parser.parse(responseString);
             JSONObject jsonObject=new JSONObject(jsonResponse);
-            System.out.println(responseString);
-            System.out.println("TOKEN: "+jsonObject.get("access_token").toString());
+            System.out.println(responseString); //todo: delete?
+            System.out.println("TOKEN: "+jsonObject.get("access_token").toString()); //todo: delete?
             return jsonObject.get("access_token").toString();
         } catch (IOException e) {
             e.printStackTrace();
@@ -88,7 +88,7 @@ public class SpotifyApiManager {
         JSONObject urls= getJsonExternalUrls(items);
         imageUrl=getImageUrl(items);
         String playlistUrl= getJsonPlaylistUrls(urls);
-        System.out.println(playlistUrl);
+        System.out.println(playlistUrl); //todo: delete?
         return new Playlist(playlistUrl,imageUrl);
 
     }

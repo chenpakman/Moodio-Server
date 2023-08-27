@@ -21,7 +21,7 @@ public class FileService {
     public String getEmotionByImage(String path, MultipartFile file){
         String filePath= saveImage(path,file);
         ProcessBuilder pb = new ProcessBuilder("emotion_identifier\\emotion_identifier.exe",filePath);
-        //ProcessBuilder pb = new ProcessBuilder("./emotion_identifier",filePath);
+        //ProcessBuilder pb = new ProcessBuilder("./emotion_identifier",filePath);  todo: delete?
        // pb.directory(new File(directoryPath+"dist/emotion_identifier"));
         long start=System.currentTimeMillis();
         try {
@@ -30,7 +30,7 @@ public class FileService {
 
 
         long end=System.currentTimeMillis();
-        System.out.println("time!"+(end-start));
+        //System.out.println("time!"+(end-start)); todo: delete
         StringBuilder builder = new StringBuilder();
         BufferedReader bfr = new BufferedReader(new InputStreamReader(p.getInputStream()));
         String line = "";
@@ -42,7 +42,7 @@ public class FileService {
             }
             builder.append(line);
         }
-        //File f= new File(filePath);
+        //File f= new File(filePath); todo: delete ?
         //f.delete();
             return builder.toString();
         } catch (IOException | InterruptedException e) {
@@ -53,7 +53,7 @@ public class FileService {
     }
     private String saveImage(String path, MultipartFile file){
         //for prod:
-        //String filePath=directoryPath+path+getImageName();
+        //String filePath=directoryPath+path+getImageName(); todo: delete ?
         //for test:
         String filePath=path+getImageName();
         File newFile=new File(path);
@@ -67,7 +67,7 @@ public class FileService {
             System.out.println("Error: "+e);
 
         }
-        System.out.println("filePath"+filePath);
+        System.out.println("filePath"+filePath);//todo: delete?
         return filePath;
     }
 

@@ -33,6 +33,7 @@ public class HeartbeatSimulator {
                 }
             }
             expectedHeartbeat=sumOfHeartbeatMeasurements/numOfHeartbeatMeasurements;
+            //todo: delete all?
             System.out.println("sumOfHeartbeatMeasurements: "+sumOfHeartbeatMeasurements);
             System.out.println("numOfHeartbeatMeasurements: "+numOfHeartbeatMeasurements);
             System.out.println("expectedHeartbeat "+(expectedHeartbeat));
