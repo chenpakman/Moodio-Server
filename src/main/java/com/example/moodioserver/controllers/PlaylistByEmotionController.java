@@ -2,9 +2,9 @@ package com.example.moodioserver.controllers;
 
 import com.example.moodioserver.HeartbeatSimulator;
 import com.example.moodioserver.Playlist;
-import com.example.moodioserver.Response.Errors;
-import com.example.moodioserver.Response.ResponseServer;
-import com.example.moodioserver.Spotify.SpotifyApiManager;
+import com.example.moodioserver.response.Errors;
+import com.example.moodioserver.response.ResponseServer;
+import com.example.moodioserver.spotify.SpotifyApiManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package com.example.moodioserver.Response;
+package com.example.moodioserver.response;
 
 import com.example.moodioserver.Playlist;
 

@@ -1,7 +1,7 @@
-package com.example.moodioserver.Spotify;
+package com.example.moodioserver.spotify;
 
 import com.example.moodioserver.Playlist;
-import com.example.moodioserver.Response.Errors;
+import com.example.moodioserver.response.Errors;
 import okhttp3.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
