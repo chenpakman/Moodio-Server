@@ -1,7 +1,7 @@
-package com.example.moodioserver.Spotify;
+package com.example.moodioserver.spotify;
 
 import com.example.moodioserver.Playlist;
-import com.example.moodioserver.Response.Errors;
+import com.example.moodioserver.response.Errors;
 import okhttp3.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -10,25 +10,28 @@ import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.util.Base64;
+import java.util.Objects;
 
 public class SpotifyApiManager {
-    private final String CLIENT_ID="a7bff5059afb4b969966df56c651f6e8";
-    private final String CLIENT_SECRET="24d87c25cc524e59ba0fa5b4d36cd157";
-
+    //private final String CLIENT_ID="a7bff5059afb4b969966df56c651f6e8";
+    private final String CLIENT_ID="2e42b3849b9d491790d9abf8bf66f16e";
+    //private final String CLIENT_SECRET="24d87c25cc524e59ba0fa5b4d36cd157";
+    private final String CLIENT_SECRET="78c59d0a90a5468681e892f205e513a7";
+    private String ACCESS_TOKEN = null;
     private String imageUrl;
 
     public Playlist getPlaylistUrl(String emotion) throws IOException {
-        String token=getSpotifyAccessToken();
-        if(token!=null) {
+        ACCESS_TOKEN = getSpotifyAccessToken();
+        if(ACCESS_TOKEN != null) {
             OkHttpClient client = new OkHttpClient();
-            HttpUrl.Builder urlBuilder = HttpUrl.parse("https://api.spotify.com/v1/search").newBuilder();
+            HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse("https://api.spotify.com/v1/search")).newBuilder();
             urlBuilder.addQueryParameter("q", emotion + " Mix");
             urlBuilder.addQueryParameter("type", "playlist");
             String url = urlBuilder.build().toString();
-            System.out.println(url);
+            System.out.println(url); //todo: delete?
 
             Request request = new Request.Builder()
-                    .header("Authorization", "Bearer "+token)
+                    .header("Authorization", "Bearer "+ACCESS_TOKEN)
                     .url(url)
                     .build();
             try (Response response = client.newCall(request).execute()) {
@@ -44,7 +47,7 @@ public class SpotifyApiManager {
         return null;
     }
 
-    private String getSpotifyAccessToken() {
+    public String getSpotifyAccessToken() {
         OkHttpClient client = new OkHttpClient();
 
         String clientCredentials = CLIENT_ID + ":" + CLIENT_SECRET;
@@ -65,8 +68,8 @@ public class SpotifyApiManager {
             JSONParser parser = new JSONParser();
             JSONObject jsonResponse = (JSONObject) parser.parse(responseString);
             JSONObject jsonObject=new JSONObject(jsonResponse);
-            System.out.println(responseString);
-            System.out.println("TOKEN: "+jsonObject.get("access_token").toString());
+            System.out.println(responseString); //todo: delete?
+            System.out.println("TOKEN: "+jsonObject.get("access_token").toString()); //todo: delete?
             return jsonObject.get("access_token").toString();
         } catch (IOException e) {
             e.printStackTrace();
@@ -85,9 +88,8 @@ public class SpotifyApiManager {
         JSONObject urls= getJsonExternalUrls(items);
         imageUrl=getImageUrl(items);
         String playlistUrl= getJsonPlaylistUrls(urls);
-        System.out.println(playlistUrl);
-        Playlist playlist=new Playlist(playlistUrl,imageUrl);
-        return playlist;
+        System.out.println(playlistUrl); //todo: delete?
+        return new Playlist(playlistUrl,imageUrl);
 
     }
     private JSONObject getJsonPlaylists(JSONObject spotifyJson) throws Exception {
@@ -120,5 +122,9 @@ public class SpotifyApiManager {
     }
     public String getImagePlaylistUrl() throws IOException {
         return imageUrl;
+    }
+
+    public void authorizeSpotify(){
+
     }
 }

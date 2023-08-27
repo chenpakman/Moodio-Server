@@ -1,4 +1,4 @@
-package com.example.moodioserver.Response;
+package com.example.moodioserver.response;
 
 public class Errors {
 

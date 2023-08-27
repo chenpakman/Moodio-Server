@@ -11,12 +11,12 @@ import java.util.stream.Stream;
 
 public class HeartbeatSimulator {
 
-    private final String filePath="C:\\Users\\chen3\\IdeaProjects\\Moodio-Server\\src\\main\\java\\com\\example\\moodioserver\\HR.csv";
+    private final String filePath="src/main/java/com/example/moodioserver/HR.csv";
     private float expectedHeartbeat;
     private int numOfHeartbeatMeasurements;
     private float sumOfHeartbeatMeasurements;
 
-    private int currentLine=0;
+    private static int currentLine=0;
     public HeartbeatSimulator(){
         calculateExpectedHeartbeat();
     }
@@ -33,6 +33,7 @@ public class HeartbeatSimulator {
                 }
             }
             expectedHeartbeat=sumOfHeartbeatMeasurements/numOfHeartbeatMeasurements;
+            //todo: delete all?
             System.out.println("sumOfHeartbeatMeasurements: "+sumOfHeartbeatMeasurements);
             System.out.println("numOfHeartbeatMeasurements: "+numOfHeartbeatMeasurements);
             System.out.println("expectedHeartbeat "+(expectedHeartbeat));

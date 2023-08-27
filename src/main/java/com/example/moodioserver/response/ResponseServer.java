@@ -1,4 +1,4 @@
-package com.example.moodioserver.Response;
+package com.example.moodioserver.response;
 
 import com.example.moodioserver.Playlist;
 
@@ -6,11 +6,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ResponseServer {
-    Map<String, Playlist> playlistsUrls;
-    String playlistUrl;
-    String error;
-    String emotion;
-    String imageUrl;
+    private Map<String, Playlist> playlistsUrls;
+    private String defaultPlaylistUrl;
+    private String error;
+    private String emotion;
+    private String imageUrl;
+
+    private String defaultMixName;
     public void setImageUrl(String imageUrl){
         this.imageUrl=imageUrl;
     }
@@ -22,8 +24,8 @@ public class ResponseServer {
         this.error = error;
     }
 
-    public void setPlaylistUrl(String playlistUrl) {
-        this.playlistUrl = playlistUrl;
+    public void setDefaultPlaylistUrl(String defaultPlaylistUrl) {
+        this.defaultPlaylistUrl = defaultPlaylistUrl;
     }
 
     public String getEmotion() {
@@ -34,8 +36,8 @@ public class ResponseServer {
         return error;
     }
 
-    public String getPlaylistUrl() {
-        return playlistUrl;
+    public String getDefaultPlaylistUrl() {
+        return defaultPlaylistUrl;
     }
 
     public Map<String, Playlist> getPlaylistsUrls() {
@@ -49,5 +51,13 @@ public class ResponseServer {
         }
 
         this.playlistsUrls.put(emotion, playlist);
+    }
+
+    public String getDefaultMixName() {
+        return defaultMixName;
+    }
+
+    public void setDefaultMixName(String defaultMixName) {
+        this.defaultMixName = defaultMixName;
     }
 }
