@@ -159,7 +159,7 @@ public class PlaylistByEmotionController {
             response.addPlaylist("Relaxing", relaxingUrl);
         }
         if (emotions.contains("Happy") || emotions.contains("Exited")){
-            Playlist happyUrl = spotifyApiManager.getPlaylistUrl("Happy");
+            Playlist happyUrl = spotifyApiManager.getPlaylistUrl("Feel Happy");
             response.addPlaylist("Happy", happyUrl);
         }
 
