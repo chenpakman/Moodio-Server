@@ -11,14 +11,15 @@ import java.util.stream.Stream;
 
 public class HeartbeatSimulator {
 
-    private final String filePath="src/main/java/com/example/moodioserver/HR.csv";
-    private float expectedHeartbeat;
-    private int numOfHeartbeatMeasurements;
+  //  private final String filePath="src/main/java/com/example/moodioserver/HR.csv";
+    private final String filePath="/home/ubuntu/moodio/HR.csv";
+    private float expectedHeartbeat=70;
+    private int numOfHeartbeatMeasurements=3180;
     private float sumOfHeartbeatMeasurements;
 
     private static int currentLine=0;
     public HeartbeatSimulator(){
-        calculateExpectedHeartbeat();
+        //calculateExpectedHeartbeat();
     }
 
     public void calculateExpectedHeartbeat(){
@@ -43,8 +44,8 @@ public class HeartbeatSimulator {
         }
     }
 
-    public Boolean isHeartbeatHigh(){
-        float currentHeartbeat=getHeartbeatFromFile();
+    public Boolean isHeartbeatHigh(float currentHeartbeat){
+
         if(currentHeartbeat>=(expectedHeartbeat+20))
         {
             return true;
@@ -59,6 +60,7 @@ public class HeartbeatSimulator {
                 System.out.println(currentLine);
                 if(currentLine==numOfHeartbeatMeasurements){
                     currentLine=0;
+                    System.out.println("currentLine "+currentLine);
                 }else {
                     currentLine++;
                 }

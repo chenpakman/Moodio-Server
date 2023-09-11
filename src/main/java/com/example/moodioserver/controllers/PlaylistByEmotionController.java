@@ -26,6 +26,7 @@ public class PlaylistByEmotionController {
     private FileService fileService;
     @Value("${project.image}")
     private String path;
+    HeartbeatSimulator heartbeatSimulator=new HeartbeatSimulator();
 
     //todo:
     //טלי: היו לי NULLPOINTEREXCEPTIONS, חשבתי שזה קשור למקבילות אז ניסיתי להפוך את הסרבר לסטייטלס
@@ -36,18 +37,15 @@ public class PlaylistByEmotionController {
 
     @PostMapping(value = "/app")
     public ResponseEntity<String> fileUpload(@RequestParam("image") MultipartFile image) {
-        HeartbeatSimulator heartbeatSimulator = new HeartbeatSimulator();
-        System.out.println("heartbeatSimulator.getHeartbeatFromFile();->"+ heartbeatSimulator.getHeartbeatFromFile()); //todo: delete?
         Gson gson = new Gson();
         ResponseServer response = new ResponseServer();
 
-        //System.out.println("Uploaded image file"); todo: delete
+        System.out.println("Uploaded image file");// todo: delete
         try {
             //savaToLocal(image);
             String resEmotion = this.fileService.getEmotionByImage(path, image);
 
-            //this.fileService.getHeartbeatFromFile();
-
+            System.out.println("resEmotion--> "+resEmotion);
             if (null != resEmotion && !resEmotion.isEmpty()) {
                 resEmotion = Character.toUpperCase(resEmotion.charAt(0)) + resEmotion.substring(1);
                 //System.out.println("resEmotion="+resEmotion); todo: delete
@@ -55,12 +53,12 @@ public class PlaylistByEmotionController {
                 return getPlayListsWithoutDeepFace(resEmotion);
             } else {
                 response.setError(Errors.getInvalidImage());
-                //System.out.println("No emotion Detected" + response.getError()); todo: delete
+                System.out.println("No emotion Detected" + response.getError());
                 return new ResponseEntity<>(gson.toJson(response), HttpStatus.NO_CONTENT);
             }
         } catch (IOException e ) {
             response.setError(e.getMessage());
-            //System.out.println("No emotion Detected" + response.getError()); todo: delete
+            System.out.println("No emotion Detected" + response.getError());// todo: delete
             return new ResponseEntity<>(gson.toJson(response), HttpStatus.NO_CONTENT);
         }
     }
@@ -71,14 +69,14 @@ public class PlaylistByEmotionController {
 
     @PutMapping(value = "/app")
     public ResponseEntity<String> getPlayListsWithoutDeepFace(@RequestParam (name = "emotions") String emotions) throws IOException {
-        HeartbeatSimulator heartbeatSimulator=new HeartbeatSimulator();
+
         Gson gson = new Gson();
         ResponseServer response = new ResponseServer();
-        boolean isHeartbeatHigh=heartbeatSimulator.isHeartbeatHigh();
+        float currentHeartbeat=heartbeatSimulator.getHeartbeatFromFile();
+        boolean isHeartbeatHigh=heartbeatSimulator.isHeartbeatHigh(currentHeartbeat);
+        response.setHeartbeat(currentHeartbeat);
         String[] splitEmotions = emotions.split(" ");
         response.setEmotion(splitEmotions[0]);
-        //System.out.println("resEmotion="+response.getEmotion()); todo: delete
-
         if(isHeartbeatHigh){
             addPlaylistHighHeartbeat(emotions,response);
         }
@@ -90,6 +88,10 @@ public class PlaylistByEmotionController {
                 (emotions.contains("Surprise") || emotions.contains("Neutral") || emotions.contains("Disgust"))){
             response.setError("Detected Surprise/Neutral/Disgust");
             return new ResponseEntity<>(gson.toJson(response), HttpStatus.NO_CONTENT);
+        }
+        System.out.println("emotions "+emotions);
+        if(null == response.getPlaylistsUrls()){
+            int x=0;
         }
 
         String detectedEmotion = response.getEmotion();
@@ -122,6 +124,7 @@ public class PlaylistByEmotionController {
         response.setDefaultPlaylistUrl(defaultUrl);
         return new ResponseEntity<>(gson.toJson(response), HttpStatus.OK);
     }
+
     private void addPlaylistHighHeartbeat(String emotions,ResponseServer response) throws IOException {
         SpotifyApiManager spotifyApiManager = new SpotifyApiManager();
         if (emotions.contains("Sad")||emotions.contains("Fear") || emotions.contains("Nervous")) {

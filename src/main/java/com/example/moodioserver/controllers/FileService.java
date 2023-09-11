@@ -18,11 +18,11 @@ import java.util.Scanner;
 public class FileService {
      private String directoryPath = "/home/ubuntu/moodio/";
      private int rowNum=1;
-    public String getEmotionByImage(String path, MultipartFile file){
+    public synchronized String  getEmotionByImage(String path, MultipartFile file){
         String filePath= saveImage(path,file);
-        ProcessBuilder pb = new ProcessBuilder("emotion_identifier\\emotion_identifier.exe",filePath);
-        //ProcessBuilder pb = new ProcessBuilder("./emotion_identifier",filePath);  todo: delete?
-       // pb.directory(new File(directoryPath+"dist/emotion_identifier"));
+        //ProcessBuilder pb = new ProcessBuilder("emotion_identifier\\emotion_identifier.exe",filePath);
+        ProcessBuilder pb = new ProcessBuilder("./emotion_identifier",filePath);
+        pb.directory(new File(directoryPath+"dist/emotion_identifier"));
         long start=System.currentTimeMillis();
         try {
             Process p = pb.start();
@@ -42,8 +42,9 @@ public class FileService {
             }
             builder.append(line);
         }
-        //File f= new File(filePath); todo: delete ?
-        //f.delete();
+        File f= new File(filePath);
+        f.delete();
+            System.out.println("delete"+f);
             return builder.toString();
         } catch (IOException | InterruptedException e) {
             System.out.println("error"+e.getMessage());
@@ -53,9 +54,9 @@ public class FileService {
     }
     private String saveImage(String path, MultipartFile file){
         //for prod:
-        //String filePath=directoryPath+path+getImageName(); todo: delete ?
+        String filePath=directoryPath+path+getImageName();
         //for test:
-        String filePath=path+getImageName();
+        //String filePath=path+getImageName();
         File newFile=new File(path);
         if(!newFile.exists()){
             newFile.mkdir();
@@ -67,15 +68,15 @@ public class FileService {
             System.out.println("Error: "+e);
 
         }
-        System.out.println("filePath"+filePath);//todo: delete?
+        System.out.println("filePath "+filePath);//todo: delete?
         return filePath;
     }
 
 
     private String getImageName(){
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMdd_HHmmss");
+       // SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMdd_HHmmss");
         String imageName;
-       imageName="IMG"+ sdf.format(new Date())+".jpg";
+       imageName="IMG"+ System.currentTimeMillis()+".jpg";
        return imageName;
 
     }
