@@ -28,13 +28,6 @@ public class PlaylistByEmotionController {
     private String path;
     HeartbeatSimulator heartbeatSimulator=new HeartbeatSimulator();
 
-    //todo:
-    //טלי: היו לי NULLPOINTEREXCEPTIONS, חשבתי שזה קשור למקבילות אז ניסיתי להפוך את הסרבר לסטייטלס
-    //טיפלתי בשגיאות אבל לא בדקתי אם הכל עובד אם הייתי מחזירה הכל חזרה
-    //private final SpotifyApiManager spotifyApiManager=new SpotifyApiManager();
-    //HeartbeatSimulator heartbeatSimulator=new HeartbeatSimulator();
-
-
     @PostMapping(value = "/app")
     public ResponseEntity<String> fileUpload(@RequestParam("image") MultipartFile image) {
         Gson gson = new Gson();
@@ -42,7 +35,6 @@ public class PlaylistByEmotionController {
 
         System.out.println("Uploaded image file");// todo: delete
         try {
-            //savaToLocal(image);
             String resEmotion = this.fileService.getEmotionByImage(path, image);
 
             System.out.println("resEmotion--> "+resEmotion);
@@ -167,39 +159,6 @@ public class PlaylistByEmotionController {
         }
 
     }
-
-    /*private void savaToLocal(MultipartFile image) { todo: delete/move to utils
-        if (image.isEmpty()) {
-            System.out.println("Please upload a file");
-        }
-
-        try {
-            // Specify the directory where you want to save the image
-            String uploadDir = "C:\\Temp";
-
-            File uploadPath = new File(uploadDir);
-            if (!uploadPath.exists()) {
-                uploadPath.mkdirs();
-            }
-
-            // Generate a unique file name for the uploaded image
-            String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
-            File targetFile = new File(uploadPath, fileName);
-
-            // Save the file
-            FileOutputStream outputStream = new FileOutputStream(targetFile);
-            outputStream.write(image.getBytes());
-            outputStream.close();
-            System.out.println("File saved successfully");
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Failed to save File");
-
-        }
-    }*/
-
-    // todo: enums for emotions/mix names
-
 
 
 }
