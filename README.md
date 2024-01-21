@@ -6,9 +6,9 @@
 
 <h2>🚀 Demo</h2>
 
-[https://github.com/chenpakman/Moodio-Server/assets/75912757/b7f59d1c-5c7f-4bd7-aae5-65a620b80f7a](https://github.com/chenpakman/Moodio-Server/assets/75912757/b7f59d1c-5c7f-4bd7-aae5-65a620b80f7a)
+https://github.com/chenpakman/Moodio-Server/assets/75912757/0203514f-ea39-4680-90f0-b1886133b0a1
 
-  
+
   
 <h2>💻 Built with</h2>
 
