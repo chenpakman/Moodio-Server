@@ -1,5 +1,5 @@
 <p align="center">
-# Moodio
+ Moodio
 </p>
 
 Introducing Moodio, designed to enhance your music experience like never before.
