@@ -1,6 +1,6 @@
 <h1 align="center" id="title">Moodio</h1>
 
-<p align="center"><img src="https://github.com/chenpakman/Moodio-Server/assets/75912757/d397c435-c604-4745-a786-b0671376cdf5)https://github.com/chenpakman/Moodio-Server/assets/75912757/d397c435-c604-4745-a786-b0671376cdf5" alt="project-image" width=70 length=100 ></p>
+<p align="center"><img src="https://github.com/chenpakman/Moodio-Server/assets/75912757/d397c435-c604-4745-a786-b0671376cdf5)https://github.com/chenpakman/Moodio-Server/assets/75912757/d397c435-c604-4745-a786-b0671376cdf5" alt="project-image" width=280 length=400 ></p>
 
 <p id="description">Introducing Moodio designed to enhance your music experience like never before. By leveraging the power of your smartwatch we measure your heartbeat a key indicator of your physiological state. 
   Additionally our app utilizes advanced image processing techniques to analyze your facial expressions. 
