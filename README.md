@@ -1,6 +1,6 @@
-<p align="center">
- Moodio
-</p>
+
+# Moodio
+
 
 Introducing Moodio, designed to enhance your music experience like never before.
 By leveraging the power of your smartwatch, we measure your heartbeat, a key indicator of your physiological state. 
